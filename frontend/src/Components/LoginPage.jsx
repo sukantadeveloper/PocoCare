@@ -40,19 +40,19 @@ function Login() {
                 isClosable: true,
                 position: "top"
             })
-            const token = response.data.token;
+            const token = response?.data?.token;
             localStorage.setItem('token', token);
             localStorage.setItem('email', userData.email);
             navigate('/')
             console.log('Login  successfully');
         } catch (error) {
             toast({
-                title: `${error.response.data.message}`,
+                title: `${error.response?.data?.message}`,
                 status: "error",
                 isClosable: true,
                 position: "top"
             })
-            console.error('Error Login in:', error.response.data.message);
+            console.error('Error Login in:', error?.response?.data?.message);
         }
     }
 
