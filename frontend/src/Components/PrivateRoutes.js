@@ -2,8 +2,8 @@ import React from "react";
 import { Navigate, useNavigate } from "react-router-dom";
 
 function PrivateRoutes({ children }) {
-  const token = localStorage.getItem("token");
-  if (!token) {
+  const AccessToken = localStorage.getItem("AccessToken");
+  if (!AccessToken) {
     return <Navigate to="/register" />;
   }
   return <>{children}</>;

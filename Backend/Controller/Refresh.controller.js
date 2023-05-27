@@ -5,7 +5,7 @@ const User = require("../Model/User.Model");
 dotenv.config();
 const RefreshRouter = express.Router();
 
-RefreshRouter.post("/refresh-token", async (req, res) => {
+RefreshRouter.post("/refresh-AccessToken", async (req, res) => {
   const email = req.body.email;
   const refreshToken = jwt.sign({ email }, process.env.REFRESH_TOKEN, {
     expiresIn: "7d",
@@ -13,7 +13,7 @@ RefreshRouter.post("/refresh-token", async (req, res) => {
   await User.findOneAndUpdate({ email }, { refreshToken }, { new: true });
 
   if (!refreshToken) {
-    return res.status(401).json({ message: "No refresh token provided" });
+    return res.status(401).json({ message: "No refresh AccessToken provided" });
   }
 
   try {
@@ -26,7 +26,7 @@ RefreshRouter.post("/refresh-token", async (req, res) => {
     );
 
     if (!isRefreshTokenValid) {
-      return res.status(401).json({ message: "Invalid refresh token" });
+      return res.status(401).json({ message: "Invalid refresh AccessToken" });
     }
 
     const accessToken = jwt.sign({ email }, process.env.ACCESS_TOKEN, {
@@ -35,8 +35,8 @@ RefreshRouter.post("/refresh-token", async (req, res) => {
 
     res.json({ accessToken });
   } catch (error) {
-    console.error("Error refreshing token:", error);
-    res.status(401).json({ message: "Invalid refresh token" });
+    console.error("Error refreshing AccessToken:", error);
+    res.status(401).json({ message: "Invalid refresh AccessToken" });
   }
 });
 
@@ -50,16 +50,16 @@ async function checkRefreshTokenValidity(email, refreshToken) {
     if (user.refreshToken !== refreshToken) {
       return false;
     }
-    // Check if the refresh token has expired
+    // Check if the refresh AccessToken has expired
     const decodedToken = jwt.verify(refreshToken, process.env.REFRESH_TOKEN);
     const currentTimestamp = Math.floor(Date.now() / 1000);
 
     if (decodedToken.exp < currentTimestamp) {
-      return false; // Refresh token has expired, invalid refresh token
+      return false; // Refresh AccessToken has expired, invalid refresh AccessToken
     }
     return true;
   } catch (error) {
-    console.error("Error checking refresh token validity:", error);
+    console.error("Error checking refresh AccessToken validity:", error);
     return false;
   }
 }

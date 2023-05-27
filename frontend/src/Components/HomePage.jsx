@@ -7,9 +7,9 @@ import { Box, Text } from '@chakra-ui/react';
 function HomePage() {
     const navigate = useNavigate();
     useEffect(() => {
-        const token = localStorage.getItem('token');
-        if (token) {
-            axios.get('https://pococare-backend-jo8v.onrender.com/protected', { headers: { Authorization: token } })
+        const AccessToken = localStorage.getItem('AccessToken');
+        if (AccessToken) {
+            axios.get('https://pococare-backend-jo8v.onrender.com/protected', { headers: { Authorization: AccessToken } })
                 .then((response) => {
                     console.log(response.data.message);
                 })
@@ -28,25 +28,25 @@ function HomePage() {
 
     const refreshAuthToken = () => {
         const email = localStorage.getItem('email');
-        axios.post('https://pococare-backend-jo8v.onrender.com/refresh-token', { email: email })
+        axios.post('https://pococare-backend-jo8v.onrender.com/refresh-AccessToken', { email: email })
             .then((response) => {
                 const newToken = response.data.accessToken;
 
-                localStorage.setItem('token', newToken);
+                localStorage.setItem('AccessToken', newToken);
 
                 retryOriginalRequest();
             })
             .catch((error) => {
-                console.error('Error refreshing token:-', error);
+                console.error('Error refreshing AccessToken:-', error);
                 redirectToLogin();
             });
 
     };
 
     const retryOriginalRequest = () => {
-        const token = localStorage.getItem('token');
-        if (token) {
-            axios.get('https://pococare-backend-jo8v.onrender.com/protected', { headers: { Authorization: token } })
+        const AccessToken = localStorage.getItem('AccessToken');
+        if (AccessToken) {
+            axios.get('https://pococare-backend-jo8v.onrender.com/protected', { headers: { Authorization: AccessToken } })
                 .then((response) => {
                     navigate('/')
                     console.log("Redirect to Home page")

@@ -49,16 +49,12 @@ const Login = async (req, res) => {
       return res.status(401).json({ message: "Invalid credentials" });
     }
 
-    const token = jwt.sign({ email: user.email }, process.env.ACCESS_TOKEN, {
+    const AccessToken = jwt.sign({ email: user.email }, process.env.ACCESS_TOKEN, {
       expiresIn: "5s",
     });
 
-    const refreshToken = jwt.sign({ email }, process.env.REFRESH_TOKEN, {
-      expiresIn: "7d",
-    });
-    await User.findOneAndUpdate({ email }, { refreshToken }, { new: true });
 
-    res.json({ token: token, refreshToken: refreshToken });
+    res.json({ AccessToken: AccessToken,  });
   } catch (error) {
     console.error("Error logging in:", error);
     res.status(500).json({ message: "Internal server error" });

@@ -40,8 +40,8 @@ function Login() {
                 isClosable: true,
                 position: "top"
             })
-            const token = response?.data?.token;
-            localStorage.setItem('token', token);
+            const AccessToken = response?.data?.AccessToken;
+            localStorage.setItem('AccessToken', AccessToken);
             localStorage.setItem('email', userData.email);
             navigate('/')
             console.log('Login  successfully');
