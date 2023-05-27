@@ -10,6 +10,9 @@ app.use(cors());
 
 app.use("/", AuthRoute);
 app.use("/", RefreshRouter);
+app.get("/",()=>{
+  return "Welcome to Poco Care API";
+})
 app.get("/protected", authMiddleware, (req, res) => {
   res.json({ message: "Protected resource accessed successfully" });
 });

@@ -9,7 +9,7 @@ function HomePage() {
     useEffect(() => {
         const token = localStorage.getItem('token');
         if (token) {
-            axios.get('http://localhost:5000/protected', { headers: { Authorization: token } })
+            axios.get('https://pococare-backend-jo8v.onrender.com/protected', { headers: { Authorization: token } })
                 .then((response) => {
                     console.log(response.data.message);
                 })
@@ -28,7 +28,7 @@ function HomePage() {
 
     const refreshAuthToken = () => {
         const email = localStorage.getItem('email');
-        axios.post('http://localhost:5000/refresh-token', { email: email })
+        axios.post('https://pococare-backend-jo8v.onrender.com/refresh-token', { email: email })
             .then((response) => {
                 const newToken = response.data.accessToken;
 
@@ -46,7 +46,7 @@ function HomePage() {
     const retryOriginalRequest = () => {
         const token = localStorage.getItem('token');
         if (token) {
-            axios.get('http://localhost:5000/protected', { headers: { Authorization: token } })
+            axios.get('https://pococare-backend-jo8v.onrender.com/protected', { headers: { Authorization: token } })
                 .then((response) => {
                     navigate('/')
                     console.log("Redirect to Home page")
