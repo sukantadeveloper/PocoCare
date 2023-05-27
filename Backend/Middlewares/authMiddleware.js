@@ -11,8 +11,8 @@ function authMiddleware(req, res, next) {
   }
 
   try {
-    const decodedToken = jwt.verify(token, process.env.JWT_SECRET);
-    //  console.log(decodedToken, jwt.verify(token, process.env.JWT_SECRET));
+    const decodedToken = jwt.verify(token, process.env.ACCESS_TOKEN);
+    //  console.log(decodedToken, jwt.verify(token, process.env.ACCESS_TOKEN));
     req.user = decodedToken.email;
     //console.log(req.user + "hle" + decodedToken.email);
     next();

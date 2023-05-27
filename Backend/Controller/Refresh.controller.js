@@ -29,7 +29,7 @@ RefreshRouter.post("/refresh-token", async (req, res) => {
       return res.status(401).json({ message: "Invalid refresh token" });
     }
 
-    const accessToken = jwt.sign({ email }, process.env.JWT_SECRET, {
+    const accessToken = jwt.sign({ email }, process.env.ACCESS_TOKEN, {
       expiresIn: "1h",
     });
 
