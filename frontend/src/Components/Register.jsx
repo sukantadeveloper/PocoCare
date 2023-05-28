@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
 import {
-
     Box,
     Heading,
     Button,
@@ -15,13 +14,14 @@ import axios from 'axios';
 import { Link, useNavigate } from 'react-router-dom';
 
 function Register() {
-    const toast = useToast()
+    const toast = useToast();
     const navigate = useNavigate();
     const [userData, setUserData] = useState({
         name: '',
         email: '',
         password: ''
-    })
+    });
+    const [isLoading, setIsLoading] = useState(false);
 
     function handleChange(event) {
         const { name, value } = event.target;
@@ -29,35 +29,36 @@ function Register() {
             ...prevFormData,
             [name]: value,
         }));
-
     }
-    async function handleSubmit(event) {
 
+    async function handleSubmit(event) {
         event.preventDefault();
+        setIsLoading(true);
+
         try {
             const response = await axios.post('https://pococare-backend-jo8v.onrender.com/register', userData);
             toast({
-                title: `Registration  successfully`,
-                status: "success",
+                title: 'Registration successful',
+                status: 'success',
                 isClosable: true,
-                position: "top"
-            })
-            navigate('/login')
-
-            console.log('Registration  successfully');
+                position: 'top'
+            });
+            navigate('/login');
+            console.log('Registration successful');
         } catch (error) {
             toast({
-                title: `${error.response.data.message}`,
-                status: "error",
+                title: error.response.data.message,
+                status: 'error',
                 isClosable: true,
-                position: "top"
-            })
-            console.error('Error Register in:', error.response.data.message);
+                position: 'top'
+            });
+            console.error('Error Registering:', error.response.data.message);
+        } finally {
+            setIsLoading(false);
         }
     }
 
     return (
-
         <Flex
             height="100vh"
             backgroundColor="gray.50"
@@ -85,7 +86,7 @@ function Register() {
                         <Input
                             required
                             type="text"
-                            name='name'
+                            name="name"
                             value={userData.name}
                             onChange={handleChange}
                             placeholder="Enter your name"
@@ -96,7 +97,7 @@ function Register() {
                         <Input
                             required
                             type="text"
-                            name='email'
+                            name="email"
                             value={userData.email}
                             onChange={handleChange}
                             placeholder="Enter your email"
@@ -107,7 +108,7 @@ function Register() {
                         <Input
                             required
                             type="password"
-                            name='password'
+                            name="password"
                             value={userData.password}
                             onChange={handleChange}
                             placeholder="Enter your password"
@@ -116,30 +117,32 @@ function Register() {
                     <Button
                         type="submit"
                         colorScheme="blue"
-
                         mb={4}
                         w="full"
                         borderRadius="full"
                         fontWeight="medium"
                         _hover={{ transform: 'scale(1.05)' }}
                         _active={{ transform: 'scale(0.95)' }}
+                        isLoading={isLoading}
                     >
-                        Register
+                        {isLoading ? 'Loading...' : 'Register'}
                     </Button>
                 </form>
-                <Text mb={4}> Do you have already account ? </Text>
-                <Link to={'/login'}  >  <Button
-                    colorScheme="green"
-                    mb={4}
-                    borderRadius="full"
-                    fontWeight="medium"
-                    _hover={{ transform: 'scale(1.05)' }}
-                    _active={{ transform: 'scale(0.95)' }}
-                >
-                    Login </Button></Link>
+                <Text mb={4}>Do you already have an account?</Text>
+                <Link to="/login">
+                    <Button
+                        colorScheme="green"
+                        mb={4}
+                        borderRadius="full"
+                        fontWeight="medium"
+                        _hover={{ transform: 'scale(1.05)' }}
+                        _active={{ transform: 'scale(0.95)' }}
+                    >
+                        Login
+                    </Button>
+                </Link>
             </Box>
         </Flex>
-
     );
 }
 

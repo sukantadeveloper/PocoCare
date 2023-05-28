@@ -5,6 +5,11 @@
  - git clone https://github.com/Sukantad/PocoCare.git
  - npm i 
 ```
+```
+Backend Url- https://pococare-backend-jo8v.onrender.com
+
+Frontend Url- https://poco-care-assignment.netlify.app
+```
 
 ### Backend 
  ```

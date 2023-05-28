@@ -20,7 +20,8 @@ function Login() {
     const [userData, setUserData] = useState({
         email: '',
         password: ''
-    })
+    });
+    const [isLoading, setIsLoading] = useState(false);
 
     function handleChange(event) {
         const { name, value } = event.target;
@@ -28,19 +29,25 @@ function Login() {
             ...prevFormData,
             [name]: value,
         }));
-
     }
+
     async function handleSubmit(event) {
         event.preventDefault();
-        try {
-            const response = await axios.post('https://pococare-backend-jo8v.onrender.com/login', userData
-            );
+        setIsLoading(true);
 
+        try {
+            const response = await axios.post('https://pococare-backend-jo8v.onrender.com/login', userData);
             const AccessToken = response?.data?.AccessToken;
             localStorage.setItem('AccessToken', AccessToken);
             localStorage.setItem('email', userData.email);
+            toast({
+                title: `Login successful`,
+                status: 'success',
+                isClosable: true,
+                position: 'top',
+            });
             navigate('/');
-            console.log('Login successfully');
+            console.log('Login successful');
         } catch (error) {
             toast({
                 title: `${error.response?.data?.message}`,
@@ -48,12 +55,13 @@ function Login() {
                 isClosable: true,
                 position: 'top',
             });
-            console.error('Error Logging in:', error?.response?.data?.message);
+            console.error('Error logging in:', error?.response?.data?.message);
+        } finally {
+            setIsLoading(false);
         }
     }
 
     return (
-
         <Flex
             height="100vh"
             backgroundColor="gray.50"
@@ -76,13 +84,12 @@ function Login() {
                     </Text>
                 </Box>
                 <form onSubmit={handleSubmit}>
-
                     <FormControl id="email" mb={4}>
                         <FormLabel>Email</FormLabel>
                         <Input
                             required
                             type="text"
-                            name='email'
+                            name="email"
                             value={userData.email}
                             onChange={handleChange}
                             placeholder="Enter your email"
@@ -93,7 +100,7 @@ function Login() {
                         <Input
                             required
                             type="password"
-                            name='password'
+                            name="password"
                             value={userData.password}
                             onChange={handleChange}
                             placeholder="Enter your password"
@@ -102,30 +109,32 @@ function Login() {
                     <Button
                         type="submit"
                         colorScheme="blue"
-
                         mb={4}
                         w="full"
                         borderRadius="full"
                         fontWeight="medium"
                         _hover={{ transform: 'scale(1.05)' }}
                         _active={{ transform: 'scale(0.95)' }}
+                        isLoading={isLoading}
                     >
-                        Login
+                        {isLoading ? 'Loading...' : 'Login'}
                     </Button>
                 </form>
-                <Text mb={4}> Don't have account ? </Text>
-                <Link to={'/register'}  >  <Button
-                    colorScheme="green"
-                    mb={4}
-                    borderRadius="full"
-                    fontWeight="medium"
-                    _hover={{ transform: 'scale(1.05)' }}
-                    _active={{ transform: 'scale(0.95)' }}
-                >
-                    Register </Button></Link>
+                <Text mb={4}>Don't have an account?</Text>
+                <Link to={'/register'}>
+                    <Button
+                        colorScheme="green"
+                        mb={4}
+                        borderRadius="full"
+                        fontWeight="medium"
+                        _hover={{ transform: 'scale(1.05)' }}
+                        _active={{ transform: 'scale(0.95)' }}
+                    >
+                        Register
+                    </Button>
+                </Link>
             </Box>
         </Flex>
-
     );
 }
 
