@@ -35,7 +35,7 @@ function Register() {
 
         event.preventDefault();
         try {
-            const response = await axios.post('https://pococare-backend-jo8v.onrender.com/register', userData);
+            const response = await axios.post('http://localhost:5000/register', userData);
             toast({
                 title: `Registration  successfully`,
                 status: "success",

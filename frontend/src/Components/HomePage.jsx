@@ -3,15 +3,23 @@ import axios from 'axios';
 import Navbar from './Navbar';
 import { Navigate, useNavigate } from 'react-router-dom';
 import { Box, Text } from '@chakra-ui/react';
-
+import { useCookies } from 'react-cookie'
 function HomePage() {
     const navigate = useNavigate();
+    // const [cookies] = useCookies();
+
+    // // Access a specific cookie
+    // const myCookie = cookies['refreshToken'];
+
+    // // Do something with the cookie
+    // console.log(myCookie,"Token");
+
     useEffect(() => {
         const AccessToken = localStorage.getItem('AccessToken');
         if (AccessToken) {
-            axios.get('https://pococare-backend-jo8v.onrender.com/protected', { headers: { Authorization: AccessToken } })
+            axios.get('http://localhost:5000/protected', { headers: { Authorization: AccessToken } })
                 .then((response) => {
-                    console.log(response.data.message);
+                    console.log(response.data.message, "respo");
                 })
                 .catch((error) => {
                     if (error.response.status === 401) {
@@ -28,7 +36,7 @@ function HomePage() {
 
     const refreshAuthToken = () => {
         const email = localStorage.getItem('email');
-        axios.post('https://pococare-backend-jo8v.onrender.com/refresh-AccessToken', { email: email })
+        axios.post('http://localhost:5000/refresh-AccessToken', { email: email })
             .then((response) => {
                 const newToken = response.data.accessToken;
 
@@ -40,13 +48,12 @@ function HomePage() {
                 console.error('Error refreshing AccessToken:-', error);
                 redirectToLogin();
             });
-
     };
 
     const retryOriginalRequest = () => {
         const AccessToken = localStorage.getItem('AccessToken');
         if (AccessToken) {
-            axios.get('https://pococare-backend-jo8v.onrender.com/protected', { headers: { Authorization: AccessToken } })
+            axios.get('http://localhost:5000/protected', { headers: { Authorization: AccessToken } })
                 .then((response) => {
                     navigate('/')
                     console.log("Redirect to Home page")
@@ -58,7 +65,7 @@ function HomePage() {
     };
 
     const redirectToLogin = () => {
-        return <Navigate to='/login' />
+        navigate("/login");
     };
 
     return (
@@ -73,16 +80,16 @@ function HomePage() {
 
                 Approximately 90% of people in India do not get medical attention on time. Our mission is to reduce this to at least 50% in the next 3 years.
                 <Text fontSize={'26px'} fontWeight={600}>
-                What do we do </Text>
+                    What do we do </Text>
 
                 We help people become emergency ready so that they are able to swiftly respond to emergencies. In case of an emergency we ensure that medical help is available in the shortest possible time. Our tech-based solution ensures that an ambulance is available at the patient’s location at the earliest, emergency contacts are informed automatically and a doctor is available to give the necessary guidance till the patient reaches the hospital.
                 <Text fontSize={'26px'} fontWeight={600}>
-                Where We Operate </Text>
+                    Where We Operate </Text>
 
                 We are headquartered in Bangalore and have service coverage in over 500 towns and cities across India..
                 <Text fontSize={'26px'} fontWeight={600}>
-                Why did we start Pococare?
-               </Text>
+                    Why did we start Pococare?
+                </Text>
                 Having worked several years in the medical emergency space working with hospitals, ambulance providers, doctors and over half a million patients, we learnt that:
 
                 The emergency infrastructure in India is equivalent to what the US had in the 1950s.

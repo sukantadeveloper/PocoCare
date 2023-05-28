@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
 import {
-
     Box,
     Heading,
     Button,
@@ -11,6 +10,7 @@ import {
     Text,
     useToast,
 } from '@chakra-ui/react';
+
 import axios from 'axios';
 import { Link, useNavigate } from 'react-router-dom';
 
@@ -33,26 +33,32 @@ function Login() {
     async function handleSubmit(event) {
         event.preventDefault();
         try {
-            const response = await axios.post('https://pococare-backend-jo8v.onrender.com/login', userData);
-            toast({
-                title: `Login  successfully`,
-                status: "success",
-                isClosable: true,
-                position: "top"
-            })
+            const response = await axios.post('http://localhost:5000/login', userData, {
+                withCredentials: true,
+                headers: {
+                    Accept: 'application/json',
+                    'Content-Type': 'application/json',
+                    'Access-Control-Allow-Credentials': true,
+                },
+            });
+
             const AccessToken = response?.data?.AccessToken;
             localStorage.setItem('AccessToken', AccessToken);
             localStorage.setItem('email', userData.email);
-            navigate('/')
-            console.log('Login  successfully');
+            navigate('/');
+            console.log('Login successfully');
+
+            // Accessing the cookies from the response headers
+            const cookies = response.headers['set-cookie'];
+            console.log('Received cookies:', "aya", document.cookie);
         } catch (error) {
             toast({
                 title: `${error.response?.data?.message}`,
-                status: "error",
+                status: 'error',
                 isClosable: true,
-                position: "top"
-            })
-            console.error('Error Login in:', error?.response?.data?.message);
+                position: 'top',
+            });
+            console.error('Error Logging in:', error?.response?.data?.message);
         }
     }
 

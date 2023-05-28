@@ -8,7 +8,7 @@ const router = express.Router();
 
 // User registration
 const Register = async (req, res) => {
-  const { email, password,name } = req.body;
+  const { email, password, name } = req.body;
 
   try {
     const existingUser = await User.findOne({ email });
@@ -49,12 +49,33 @@ const Login = async (req, res) => {
       return res.status(401).json({ message: "Invalid credentials" });
     }
 
-    const AccessToken = jwt.sign({ email: user.email }, process.env.ACCESS_TOKEN, {
-      expiresIn: "5s",
+    const AccessToken = jwt.sign(
+      { email: user.email },
+      process.env.ACCESS_TOKEN,
+      {
+        expiresIn: "5s",
+      }
+    );
+    const refreshToken = jwt.sign({ email }, process.env.REFRESH_TOKEN, {
+      expiresIn: "7d",
     });
 
+    try {
+      await User.findOneAndUpdate({ email }, { refreshToken }, { new: true });
+    } catch (error) {
+      console.log(error);
+    }
+    // res.setHeader("Access-Control-Allow-Origin", "http://localhost:3000");
+    // res.setHeader("Access-Control-Allow-Credentials", "true");
+    // res.cookie("refreshToken", refreshToken, {
+    //   httpOnly: true,
+    // });
+    // res.cookie("accessToken", AccessToken, {
+    //   maxAge: 1000 * 60 * 60 * 24 * 30,
+    //   httpOnly: true,
+    // });
 
-    res.json({ AccessToken: AccessToken,  });
+    res.json({ AccessToken: AccessToken });
   } catch (error) {
     console.error("Error logging in:", error);
     res.status(500).json({ message: "Internal server error" });
