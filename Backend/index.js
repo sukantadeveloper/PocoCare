@@ -18,7 +18,7 @@ app.use(
   })
 );
 
-const allowedOrigins = ["http://localhost:3000"];
+const allowedOrigins = ["https://poco-care-assignment.netlify.app"];
 
 app.use(function (req, res, next) {
   let origin = req.headers.origin;

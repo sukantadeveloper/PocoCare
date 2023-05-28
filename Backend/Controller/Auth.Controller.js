@@ -65,15 +65,6 @@ const Login = async (req, res) => {
     } catch (error) {
       console.log(error);
     }
-    // res.setHeader("Access-Control-Allow-Origin", "http://localhost:3000");
-    // res.setHeader("Access-Control-Allow-Credentials", "true");
-    // res.cookie("refreshToken", refreshToken, {
-    //   httpOnly: true,
-    // });
-    // res.cookie("accessToken", AccessToken, {
-    //   maxAge: 1000 * 60 * 60 * 24 * 30,
-    //   httpOnly: true,
-    // });
 
     res.json({ AccessToken: AccessToken });
   } catch (error) {

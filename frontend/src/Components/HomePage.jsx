@@ -3,21 +3,14 @@ import axios from 'axios';
 import Navbar from './Navbar';
 import { Navigate, useNavigate } from 'react-router-dom';
 import { Box, Text } from '@chakra-ui/react';
-import { useCookies } from 'react-cookie'
 function HomePage() {
     const navigate = useNavigate();
-    // const [cookies] = useCookies();
 
-    // // Access a specific cookie
-    // const myCookie = cookies['refreshToken'];
-
-    // // Do something with the cookie
-    // console.log(myCookie,"Token");
 
     useEffect(() => {
         const AccessToken = localStorage.getItem('AccessToken');
         if (AccessToken) {
-            axios.get('http://localhost:5000/protected', { headers: { Authorization: AccessToken } })
+            axios.get('https://pococare-backend-jo8v.onrender.com/protected', { headers: { Authorization: AccessToken } })
                 .then((response) => {
                     console.log(response.data.message, "respo");
                 })
@@ -36,7 +29,7 @@ function HomePage() {
 
     const refreshAuthToken = () => {
         const email = localStorage.getItem('email');
-        axios.post('http://localhost:5000/refresh-AccessToken', { email: email })
+        axios.post('https://pococare-backend-jo8v.onrender.com/refresh-token', { email: email })
             .then((response) => {
                 const newToken = response.data.accessToken;
 
@@ -53,7 +46,7 @@ function HomePage() {
     const retryOriginalRequest = () => {
         const AccessToken = localStorage.getItem('AccessToken');
         if (AccessToken) {
-            axios.get('http://localhost:5000/protected', { headers: { Authorization: AccessToken } })
+            axios.get('https://pococare-backend-jo8v.onrender.com/protected', { headers: { Authorization: AccessToken } })
                 .then((response) => {
                     navigate('/')
                     console.log("Redirect to Home page")

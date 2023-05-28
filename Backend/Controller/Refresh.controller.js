@@ -5,7 +5,7 @@ const User = require("../Model/User.Model");
 dotenv.config();
 const RefreshRouter = express.Router();
 
-RefreshRouter.post("/refresh-AccessToken", async (req, res) => {
+RefreshRouter.post("/refresh-token", async (req, res) => {
   const email = req.body.email;
   const refreshToken = jwt.sign({ email }, process.env.REFRESH_TOKEN, {
     expiresIn: "7d",

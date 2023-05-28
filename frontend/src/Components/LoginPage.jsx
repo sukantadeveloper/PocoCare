@@ -33,24 +33,14 @@ function Login() {
     async function handleSubmit(event) {
         event.preventDefault();
         try {
-            const response = await axios.post('http://localhost:5000/login', userData, {
-                withCredentials: true,
-                headers: {
-                    Accept: 'application/json',
-                    'Content-Type': 'application/json',
-                    'Access-Control-Allow-Credentials': true,
-                },
-            });
+            const response = await axios.post('https://pococare-backend-jo8v.onrender.com/login', userData
+            );
 
             const AccessToken = response?.data?.AccessToken;
             localStorage.setItem('AccessToken', AccessToken);
             localStorage.setItem('email', userData.email);
             navigate('/');
             console.log('Login successfully');
-
-            // Accessing the cookies from the response headers
-            const cookies = response.headers['set-cookie'];
-            console.log('Received cookies:', "aya", document.cookie);
         } catch (error) {
             toast({
                 title: `${error.response?.data?.message}`,
