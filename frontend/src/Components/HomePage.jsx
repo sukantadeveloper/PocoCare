@@ -7,59 +7,59 @@ function HomePage() {
     const navigate = useNavigate();
 
 
-    useEffect(() => {
-        const AccessToken = localStorage.getItem('AccessToken');
-        if (AccessToken) {
-            axios.get('https://pococare-backend-jo8v.onrender.com/protected', { headers: { Authorization: AccessToken } })
-                .then((response) => {
-                    console.log(response.data.message, "respo");
-                })
-                .catch((error) => {
-                    if (error.response.status === 401) {
+    // useEffect(() => {
+    //     const AccessToken = localStorage.getItem('AccessToken');
+    //     if (AccessToken) {
+    //         axios.get('https://pococare-backend-jo8v.onrender.com/protected', { headers: { Authorization: AccessToken } })
+    //             .then((response) => {
+    //                 console.log(response.data.message, "respo");
+    //             })
+    //             .catch((error) => {
+    //                 if (error.response.status === 401) {
 
-                        refreshAuthToken();
-                    } else {
-                        console.error('Error accessing protected resource:', error);
-                    }
-                });
-        } else {
-            console.log('User not authenticated');
-        }
-    }, []);
+    //                     refreshAuthToken();
+    //                 } else {
+    //                     console.error('Error accessing protected resource:', error);
+    //                 }
+    //             });
+    //     } else {
+    //         console.log('User not authenticated');
+    //     }
+    // }, []);
 
-    const refreshAuthToken = () => {
-        const email = localStorage.getItem('email');
-        axios.post('https://pococare-backend-jo8v.onrender.com/refresh-token', { email: email })
-            .then((response) => {
-                const newToken = response.data.accessToken;
+    // const refreshAuthToken = () => {
+    //     const email = localStorage.getItem('email');
+    //     axios.post('https://pococare-backend-jo8v.onrender.com/refresh-token', { email: email })
+    //         .then((response) => {
+    //             const newToken = response.data.accessToken;
 
-                localStorage.setItem('AccessToken', newToken);
+    //             localStorage.setItem('AccessToken', newToken);
 
-                retryOriginalRequest();
-            })
-            .catch((error) => {
-                console.error('Error refreshing AccessToken:-', error);
-                redirectToLogin();
-            });
-    };
+    //             retryOriginalRequest();
+    //         })
+    //         .catch((error) => {
+    //             console.error('Error refreshing AccessToken:-', error);
+    //             redirectToLogin();
+    //         });
+    // };
 
-    const retryOriginalRequest = () => {
-        const AccessToken = localStorage.getItem('AccessToken');
-        if (AccessToken) {
-            axios.get('https://pococare-backend-jo8v.onrender.com/protected', { headers: { Authorization: AccessToken } })
-                .then((response) => {
-                    navigate('/')
-                    console.log("Redirect to Home page")
-                })
-                .catch((error) => {
-                    console.error('Error accessing protected resource:', error);
-                });
-        }
-    };
+    // const retryOriginalRequest = () => {
+    //     const AccessToken = localStorage.getItem('AccessToken');
+    //     if (AccessToken) {
+    //         axios.get('https://pococare-backend-jo8v.onrender.com/protected', { headers: { Authorization: AccessToken } })
+    //             .then((response) => {
+    //                 navigate('/')
+    //                 console.log("Redirect to Home page")
+    //             })
+    //             .catch((error) => {
+    //                 console.error('Error accessing protected resource:', error);
+    //             });
+    //     }
+    // };
 
-    const redirectToLogin = () => {
-        navigate("/login");
-    };
+    // const redirectToLogin = () => {
+    //     navigate("/login");
+    // };
 
     return (
         <div>
@@ -81,7 +81,7 @@ function HomePage() {
 
                 We are headquartered in Bangalore and have service coverage in over 500 towns and cities across India..
                 <Text fontSize={'26px'} fontWeight={600}>
-                    Why did we start Pococare?
+                    Why did we start ?
                 </Text>
                 Having worked several years in the medical emergency space working with hospitals, ambulance providers, doctors and over half a million patients, we learnt that:
 

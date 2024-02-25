@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import {
     Box,
     Heading,
@@ -13,6 +13,7 @@ import {
 
 import axios from 'axios';
 import { Link, useNavigate } from 'react-router-dom';
+import Cookies from 'js-cookie';  // Import js-cookie library
 
 function Login() {
     const toast = useToast();
@@ -34,33 +35,44 @@ function Login() {
     async function handleSubmit(event) {
         event.preventDefault();
         setIsLoading(true);
-
+    
         try {
-            const response = await axios.post('https://pococare-backend-jo8v.onrender.com/login', userData);
-            const AccessToken = response?.data?.AccessToken;
-            localStorage.setItem('AccessToken', AccessToken);
-            localStorage.setItem('email', userData.email);
-            toast({
-                title: `Login successful`,
-                status: 'success',
-                isClosable: true,
-                position: 'top',
-            });
-            navigate('/');
-            console.log('Login successful');
+          const response = await axios.post('http://localhost:5000/login', userData, {
+            withCredentials: true,
+          });
+    
+          const refreshToken = Cookies.get('refreshToken');
+          console.log('Refresh Token after Login:', refreshToken);
+    
+          toast({
+            title: 'Login successful',
+            status: 'success',
+            isClosable: true,
+            position: 'top',
+          });
+          navigate('/');
+          console.log('Login successful');
         } catch (error) {
-            toast({
-                title: `${error.response?.data?.message}`,
-                status: 'error',
-                isClosable: true,
-                position: 'top',
-            });
-            console.error('Error logging in:', error?.response?.data?.message);
+          toast({
+            title: `${error.response?.data?.message}`,
+            status: 'error',
+            isClosable: true,
+            position: 'top',
+          });
+          console.error('Error logging in:', error?.response?.data?.message);
         } finally {
-            setIsLoading(false);
+          setIsLoading(false);
         }
-    }
+      }
+    
 
+    useEffect(() => {
+        // Fetch the refreshToken once the component mounts
+        const refreshToken = Cookies.get('refreshToken');
+        console.log('Refresh Token on Mount:', refreshToken);
+      }, []); // Empty dependency array ensures it runs only once after component mounts
+    
+    
     return (
         <Flex
             height="100vh"
@@ -77,7 +89,7 @@ function Login() {
             >
                 <Box textAlign="center" mb={8}>
                     <Heading as="h1" fontSize="22px">
-                        PocoCare
+                        Testing form
                     </Heading>
                     <Text fontSize="15px" mt={2} color="gray.600">
                         Login

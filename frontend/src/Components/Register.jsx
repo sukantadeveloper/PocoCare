@@ -21,6 +21,11 @@ function Register() {
         email: '',
         password: ''
     });
+    const [errors, setErrors] = useState({
+        name: '',
+        email: '',
+        password: ''
+    });
     const [isLoading, setIsLoading] = useState(false);
 
     function handleChange(event) {
@@ -29,6 +34,21 @@ function Register() {
             ...prevFormData,
             [name]: value,
         }));
+
+        // Validation logic
+        if (name === 'email') {
+            const isValidEmail = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value);
+            setErrors(prevErrors => ({
+                ...prevErrors,
+                email: isValidEmail ? '' : 'Invalid email address'
+            }));
+        } else if (name === 'password') {
+            const isValidPassword = value.length >= 8;
+            setErrors(prevErrors => ({
+                ...prevErrors,
+                password: isValidPassword ? '' : 'Password must be at least 8 characters long'
+            }));
+        }
     }
 
     async function handleSubmit(event) {
@@ -74,7 +94,7 @@ function Register() {
             >
                 <Box textAlign="center" mb={8}>
                     <Heading as="h1" fontSize="22px">
-                        PocoCare
+                        Testing form
                     </Heading>
                     <Text fontSize="15px" mt={2} color="gray.600">
                         Sign Up
@@ -102,6 +122,7 @@ function Register() {
                             onChange={handleChange}
                             placeholder="Enter your email"
                         />
+                        {errors.email && <Text color="red.500">{errors.email}</Text>}
                     </FormControl>
                     <FormControl id="password" mb={8}>
                         <FormLabel>Password</FormLabel>
@@ -113,6 +134,7 @@ function Register() {
                             onChange={handleChange}
                             placeholder="Enter your password"
                         />
+                        {errors.password && <Text color="red.500">{errors.password}</Text>}
                     </FormControl>
                     <Button
                         type="submit"
